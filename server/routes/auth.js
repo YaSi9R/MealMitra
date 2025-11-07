@@ -1,7 +1,11 @@
+import express from "express"
 import jwt from "jsonwebtoken"
 import User from "../models/User.js"
 
-export const register = async (req, res) => {
+const router = express.Router()
+
+// Register route
+router.post("/register", async (req, res) => {
   try {
     const { name, email, password, role } = req.body
 
@@ -10,7 +14,7 @@ export const register = async (req, res) => {
 
     const user = await User.create({ name, email, password, role })
     const token = jwt.sign(
-      { userId: user._id, role: user.role }, // ✅ include role
+      { userId: user._id, role: user.role },
       process.env.JWT_SECRET || "secret_key",
       { expiresIn: "7d" }
     )
@@ -23,9 +27,10 @@ export const register = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message })
   }
-}
+})
 
-export const login = async (req, res) => {
+// Login route
+router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body
     const user = await User.findOne({ email })
@@ -36,7 +41,7 @@ export const login = async (req, res) => {
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials" })
 
     const token = jwt.sign(
-      { userId: user._id, role: user.role }, // ✅ include role here too
+      { userId: user._id, role: user.role },
       process.env.JWT_SECRET || "secret_key",
       { expiresIn: "7d" }
     )
@@ -49,4 +54,6 @@ export const login = async (req, res) => {
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message })
   }
-}
+})
+
+export default router
