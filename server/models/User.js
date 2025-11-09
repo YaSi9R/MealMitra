@@ -13,11 +13,12 @@ const userSchema = new mongoose.Schema({
       default: "Point",
     },
     coordinates: {
-      type: [Number], // [longitude, latitude]
-      required: true,
+      type: [Number],
+      default: [0, 0],
     },
     address: String,
   },
+
   organizationName: String,
   organizationType: String, // For receivers: NGO, Shelter, Food Bank, etc.
   description: String,

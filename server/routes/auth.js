@@ -13,6 +13,8 @@ router.post("/register", async (req, res) => {
     if (existing) return res.status(400).json({ message: "User already exists" })
 
     const user = await User.create({ name, email, password, role })
+    console.log(req.body)
+
     const token = jwt.sign(
       { userId: user._id, role: user.role },
       process.env.JWT_SECRET || "secret_key",
@@ -25,8 +27,10 @@ router.post("/register", async (req, res) => {
       user: { id: user._id, name: user.name, email: user.email, role: user.role },
     })
   } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message })
+    console.error("🔥 Error in /api/auth/register:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
   }
+
 })
 
 // Login route
