@@ -1,0 +1,33 @@
+
+{
+  "rice": {
+    "expiry_hours": 12
+  },
+  "dal": {
+    "expiry_hours": 8
+  },
+  "roti": {
+    "expiry_hours": 10
+  },
+  "paneer": {
+    "expiry_hours": 6
+  },
+  "vegetable_curry": {
+    "expiry_hours": 8
+  },
+  "chicken_curry": {
+    "expiry_hours": 5
+  },
+  "salad": {
+    "expiry_hours": 4
+  },
+  "milk": {
+    "expiry_hours": 6
+  },
+  "biryani": {
+    "expiry_hours": 8
+  },
+  "noodles": {
+    "expiry_hours": 6
+  }
+}
