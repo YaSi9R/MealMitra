@@ -6,7 +6,7 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "eslint .",
-    "start": "next start"
+    "start": "npm start"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
@@ -59,6 +59,7 @@
     "react-day-picker": "9.8.0",
     "react-dom": "^19",
     "react-hook-form": "^7.60.0",
+    "react-is": "^19.2.7",
     "react-resizable-panels": "^2.1.7",
     "recharts": "latest",
     "socket.io": "latest",

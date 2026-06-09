@@ -100,6 +100,11 @@ export const expandingRadiusNotificationAlgorithm = async (foodItem, donor, io) 
 
       console.log(`[ALGORITHM] Found ${newReceivers.length} new receivers in ${radiusKm}km radius`)
 
+      if (newReceivers.length === 0) {
+        console.log(`[ALGORITHM] No new receivers in this wave, skipping...`)
+        continue
+      }
+
       // Send notifications to new receivers
       const notificationPromises = newReceivers.map(async (receiver) => {
         const distance = calculateDistance(foodItem.pickupLocation.coordinates, receiver.location.coordinates)
@@ -157,6 +162,7 @@ export const expandingRadiusNotificationAlgorithm = async (foodItem, donor, io) 
         radiusKm,
         sentAt: new Date(),
         recipientsCount: sentNotifications.length,
+        recipientIds: newReceivers.map((r) => r._id),
       })
       await foodItem.save()
 

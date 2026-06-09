@@ -12,7 +12,9 @@ import { useAuth } from "@/hooks/useAuth"
 
 export default function SignupPage() {
   const searchParams = useSearchParams()
-  const { register, loading, error } = useAuth()
+  const { register, loading, error, sendOTP } = useAuth()
+  const [otpSent, setOtpSent] = useState(false)
+  const [sendingOtp, setSendingOtp] = useState(false)
 
   // ✅ Start with a default, then update once mounted
   const [role, setRole] = useState<"donor" | "receiver">("donor")
@@ -37,6 +39,7 @@ export default function SignupPage() {
     address: "",
     organizationName: "",
     organizationType: "",
+    otp: "",
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -44,6 +47,20 @@ export default function SignupPage() {
       ...formData,
       [e.target.name]: e.target.value,
     })
+  }
+
+  const handleSendOTP = async () => {
+    if (!formData.email) {
+      alert("Please enter your email first")
+      return
+    }
+    setSendingOtp(true)
+    const success = await sendOTP(formData.email)
+    if (success) {
+      setOtpSent(true)
+      alert("OTP sent to your email (check server console)")
+    }
+    setSendingOtp(false)
   }
 
   const handleSignup = async (e: React.FormEvent) => {
@@ -65,6 +82,7 @@ export default function SignupPage() {
       address: formData.address,
       organizationName: role === "donor" ? formData.organizationName : undefined,
       organizationType: role === "receiver" ? formData.organizationType : undefined,
+      otp: formData.otp,
     })
   }
 
@@ -132,19 +150,49 @@ export default function SignupPage() {
               {/* Email */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
-                  <Input
-                    type="email"
-                    name="email"
-                    placeholder="you@example.com"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="pl-10 border-emerald-200 focus:border-emerald-500"
-                    required
-                  />
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <Mail className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                    <Input
+                      type="email"
+                      name="email"
+                      placeholder="you@example.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="pl-10 border-emerald-200 focus:border-emerald-500"
+                      required
+                    />
+                  </div>
+                  <Button 
+                    type="button" 
+                    onClick={handleSendOTP} 
+                    disabled={sendingOtp || otpSent}
+                    className="bg-emerald-100 text-emerald-700 hover:bg-emerald-200"
+                  >
+                    {otpSent ? "Sent" : sendingOtp ? "..." : "Send OTP"}
+                  </Button>
                 </div>
               </div>
+
+              {/* OTP Input */}
+              {otpSent && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Verification Code (OTP)</label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 w-5 h-5 text-gray-400" />
+                    <Input
+                      type="text"
+                      name="otp"
+                      placeholder="6-digit code"
+                      value={formData.otp}
+                      onChange={handleChange}
+                      className="pl-10 border-emerald-200 focus:border-emerald-500"
+                      maxLength={6}
+                      required
+                    />
+                  </div>
+                </div>
+              )}
 
               {/* Phone */}
               <div>

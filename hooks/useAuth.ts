@@ -56,5 +56,18 @@ export const useAuth = () => {
     router.push("/")
   }
 
-  return { user, loading, error, register, login, logout }
+  const sendOTP = async (email: string) => {
+    try {
+      setLoading(true)
+      await authAPI.sendOTP(email)
+      return true
+    } catch (err: any) {
+      setError(err.message)
+      return false
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return { user, loading, error, register, login, logout, sendOTP }
 }

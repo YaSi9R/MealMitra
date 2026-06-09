@@ -31,6 +31,7 @@ const foodItemSchema = new mongoose.Schema({
       radiusKm: Number,
       sentAt: Date,
       recipientsCount: Number,
+      recipientIds: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     },
   ],
   createdAt: { type: Date, default: Date.now },

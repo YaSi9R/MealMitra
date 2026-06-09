@@ -40,6 +40,7 @@ export const apiCall = async (endpoint: string, options: RequestInit = {}) => {
 export const authAPI = {
   register: (data: any) => apiCall("/auth/register", { method: "POST", body: JSON.stringify(data) }),
   login: (data: any) => apiCall("/auth/login", { method: "POST", body: JSON.stringify(data) }),
+  sendOTP: (email: string) => apiCall("/auth/send-otp", { method: "POST", body: JSON.stringify({ email }) }),
 }
 
 // ===================== DONOR =====================
@@ -48,6 +49,10 @@ export const donorAPI = {
   getMyItems: () => apiCall("/donor/my-items"),
   updateItemStatus: (id: string, status: string) =>
     apiCall(`/donor/item/${id}/status`, { method: "PUT", body: JSON.stringify({ status }) }),
+  getRequests: () => apiCall("/donor/requests"),
+  updateRequestStatus: (requestId: string, status: string) =>
+    apiCall(`/donor/request/${requestId}/status`, { method: "PUT", body: JSON.stringify({ status }) }),
+  getReceivers: () => apiCall("/donor/receivers"),
 }
 
 // ===================== RECEIVER =====================
